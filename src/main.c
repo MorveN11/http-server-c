@@ -5,6 +5,8 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
+    setbuf(stdout, NULL);
+
     int server_fd = start_server();
 
     if (server_fd == -1) {

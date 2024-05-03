@@ -1,7 +1,8 @@
 #include "client.h"
 #include "connection/connection.h"
-#include "request/request.h"
-#include "response/response.h"
+#include "request_handler/request/request.h"
+#include "request_handler/request_handler.h"
+#include "response_handler/response_handler.h"
 #include <stdio.h>
 
 void handle_client(int server_fd) {
@@ -14,15 +15,15 @@ void handle_client(int server_fd) {
 
     printf("Client connected\n");
 
-    int request_status = handle_request(client_fd);
+    struct Request *request = handle_request(client_fd);
 
-    if (request_status == -1) {
-        printf("Failed to read request\n");
+    if (request == NULL) {
+        printf("Failed to handle request\n");
         close_connection();
         return;
     }
 
-    int response_status = handle_response(client_fd);
+    int response_status = handle_response(client_fd, *request);
 
     if (response_status == -1) {
         printf("Failed to send response\n");
@@ -31,5 +32,6 @@ void handle_client(int server_fd) {
     }
 
     close_connection();
+
     printf("Client disconnected\n\n");
 }
