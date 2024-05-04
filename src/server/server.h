@@ -2,7 +2,7 @@
 #define SERVER_H
 
 #define MAX_CONNECTIONS 30
-#define PORT 4221
+#define PORT 3000
 
 int start_server();
 

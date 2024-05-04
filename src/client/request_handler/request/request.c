@@ -35,7 +35,7 @@ struct Request parse_request(char *request) {
         content_length = atoi(content_length_string);
     }
 
-    char *body = "";
+    char *body = "[No Body Recieved]";
 
     if (content_length > 0) {
         body = tokens[get_string_list_size(tokens) - 1];

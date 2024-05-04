@@ -1,23 +1,22 @@
 #include "response_handler.h"
+#include "../../routes/routes.h"
 #include "../request_handler/request/request.h"
-#include "responses/delete/delete.h"
-#include "responses/get/get.h"
-#include "responses/patch/patch.h"
-#include "responses/post/post.h"
-#include "responses/put/put.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-struct HttpResponse *get_response_by_path(struct HttpResponse *responses, char *path) {
-
+struct Response *get_response_by_path(struct Response *responses, char *path) {
     if (responses == NULL) {
         return NULL;
     }
 
     for (int i = 0; responses[i].path != NULL; i++) {
-        if (strcmp(responses[i].path, path) == 0) {
+        if (responses[i].starts_with == 0 && strcmp(responses[i].path, path) == 0) {
+            return &responses[i];
+        }
+
+        if (responses[i].starts_with == 1 && strncmp(responses[i].path, path, strlen(responses[i].path)) == 0) {
             return &responses[i];
         }
     }
@@ -25,18 +24,12 @@ struct HttpResponse *get_response_by_path(struct HttpResponse *responses, char *
     return NULL;
 }
 
-int handle_response(int client_fd, struct Request request) {
-    struct Routes routes[] = {
-        {GET, (struct HttpResponse *)get_get_responses()},     {POST, (struct HttpResponse *)get_post_responses()},
-        {PUT, (struct HttpResponse *)get_put_responses()},     {DELETE, (struct HttpResponse *)get_delete_responses()},
-        {PATCH, (struct HttpResponse *)get_patch_responses()}, {UNKNOWN, (struct HttpResponse *){NULL}},
-    };
-
+int handle_response(int client_fd, struct Request *request, struct Routes *routes) {
     char *response_message;
 
-    struct HttpResponse *responses = routes[request.type].responses;
+    struct Response *responses = routes[request->type].responses;
 
-    struct HttpResponse *response = get_response_by_path(responses, request.path);
+    struct Response *response = get_response_by_path(responses, request->path);
 
     if (response == NULL) {
         response_message = NOT_FOUND_RESPONSE;
@@ -50,7 +43,13 @@ int handle_response(int client_fd, struct Request request) {
         return EXIT_FAILURE;
     }
 
-    printf("Response Sent:\n%s", response_message);
+    int size = strlen(response_message);
+
+    if (response_message[size - 1] == '\n') {
+        printf("Response Sent:\n%s", response_message);
+    } else {
+        printf("Response Sent:\n%s\n\n", response_message);
+    }
 
     return EXIT_SUCCESS;
 }

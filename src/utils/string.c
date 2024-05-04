@@ -1,4 +1,5 @@
 #include "string.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -21,6 +22,24 @@ char *get_string_starts_with(char **list, char *start) {
         }
     }
     return NULL;
+}
+
+char *get_substring(char *str, int start) {
+    int size = strlen(str) - start + 1;
+    char *substring = (char *)malloc(size * sizeof(char));
+
+    if (substring == NULL) {
+        printf("Failed to allocate memory for substring\n");
+        return NULL;
+    }
+
+    for (int i = start, j = 0; str[i] != '\0'; i++, j++) {
+        substring[j] = str[i];
+    }
+
+    substring[size - 1] = '\0';
+
+    return substring;
 }
 
 int get_string_list_size(char **list) {
