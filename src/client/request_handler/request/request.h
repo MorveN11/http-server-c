@@ -4,6 +4,14 @@
 #define REQUEST_H
 
 #define MAX_BUFFER_SIZE 2048
+#define METHOD_SIZE 8
+#define PATH_SIZE 1024
+#define HTTP_VERSION_SIZE 16
+#define HOST_SIZE 128
+#define CONTENT_TYPE_SIZE 128
+#define USER_AGENT_SIZE 128
+#define ACCEPT_SIZE 128
+#define CONTENT_LENGTH_SIZE 128
 
 struct Request {
     enum RequestType type;

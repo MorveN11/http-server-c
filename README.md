@@ -1,11 +1,11 @@
-# Http Server in C
+# HTTP Server in C
 
-by Manuel Morales
+By Manuel Morales
 
 ## Run the server
 
 Execute the following command in the terminal to run the server:
 
 ```bash
-./build.sh
+./run.sh
 ```

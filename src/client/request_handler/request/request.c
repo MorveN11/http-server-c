@@ -20,16 +20,30 @@ struct Request parse_request(char *request) {
 
     char **request_line = split_string(tokens[0], " ");
 
-    char *host = get_request_attribute_by_key(tokens, "Host");
+    char *method = malloc(sizeof(char) * METHOD_SIZE);
+    strcpy(method, request_line[0]);
 
-    char *content_type = get_request_attribute_by_key(tokens, "Content-Type");
+    char *path = malloc(sizeof(char) * PATH_SIZE);
+    strcpy(path, request_line[1]);
 
-    char *user_agent = get_request_attribute_by_key(tokens, "User-Agent");
+    char *http_version = malloc(sizeof(char) * HTTP_VERSION_SIZE);
+    strcpy(http_version, request_line[2]);
 
-    char *accept = get_request_attribute_by_key(tokens, "Accept");
+    char *host = malloc(sizeof(char) * HOST_SIZE);
+    strcpy(host, get_request_attribute_by_key(tokens, "Host"));
+
+    char *content_type = malloc(sizeof(char) * CONTENT_TYPE_SIZE);
+    strcpy(content_type, get_request_attribute_by_key(tokens, "Content-Type"));
+
+    char *user_agent = malloc(sizeof(char) * USER_AGENT_SIZE);
+    strcpy(user_agent, get_request_attribute_by_key(tokens, "User-Agent"));
+
+    char *accept = malloc(sizeof(char) * ACCEPT_SIZE);
+    strcpy(accept, get_request_attribute_by_key(tokens, "Accept"));
 
     int content_length = 0;
-    char *content_length_string = get_request_attribute_by_key(tokens, "Content-Length");
+    char *content_length_string = malloc(sizeof(char) * CONTENT_LENGTH_SIZE);
+    strcpy(content_length_string, get_request_attribute_by_key(tokens, "Content-Length"));
 
     if (strcmp(content_length_string, "") != 0) {
         content_length = atoi(content_length_string);
@@ -54,9 +68,9 @@ struct Request parse_request(char *request) {
     }
 
     return (struct Request){
-        .type = parse_request_type(request_line[0]),
-        .path = request_line[1],
-        .http_version = request_line[2],
+        .type = parse_request_type(method),
+        .path = path,
+        .http_version = http_version,
         .host = host,
         .content_type = content_type,
         .user_agent = user_agent,
