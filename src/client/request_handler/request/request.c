@@ -38,7 +38,19 @@ struct Request parse_request(char *request) {
     char *body = "[No Body Recieved]";
 
     if (content_length > 0) {
-        body = tokens[get_string_list_size(tokens) - 1];
+        body = malloc(sizeof(char) * (content_length + 1));
+        int body_index = get_index_string_starts_with(tokens, "Content-Length") + 1;
+        int last_index = get_string_list_size(tokens) - 1;
+
+        while (body_index <= last_index) {
+            char line[strlen(tokens[body_index]) + 1];
+            strcpy(line, tokens[body_index]);
+            strcat(line, "\n");
+            strcat(body, line);
+            body_index++;
+        }
+
+        body[content_length] = '\0';
     }
 
     return (struct Request){

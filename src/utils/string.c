@@ -42,6 +42,16 @@ char *get_substring(char *str, int start) {
     return substring;
 }
 
+int get_index_string_starts_with(char **list, char *start) {
+    for (int i = 0; list[i] != NULL; i++) {
+        if (strstr(list[i], start) != NULL) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 int get_string_list_size(char **list) {
     int size = 0;
     for (int i = 0; list[i] != NULL; i++) {

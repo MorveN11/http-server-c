@@ -9,6 +9,8 @@ char *get_string_starts_with(char **list, char *start);
 
 char *get_substring(char *str, int start);
 
+int get_index_string_starts_with(char **list, char *start);
+
 int get_string_list_size(char **list);
 
 #endif
