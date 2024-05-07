@@ -9,8 +9,12 @@
 int server_fd;
 
 void stop_server() {
-    printf("Stopping server...\n");
+    printf("\n\nStopping server...\n");
+
     close(server_fd);
+
+    printf("Server stopped\n");
+    printf("Exiting...\n\n");
 
     exit(EXIT_SUCCESS);
 }
