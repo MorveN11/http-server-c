@@ -1,4 +1,4 @@
-#include </usr/include/python3.12/Python.h>
+#include <python3.12/Python.h>
 
 char *execute_python_code(const char *python_code) {
     Py_Initialize();
