@@ -5,20 +5,42 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
+    printf("Starting server...\n\n");
+
+    if (argc != 3) {
+        printf("Error: Invalid number of arguments.\n");
+        printf("Usage: ./server -p <port>\n\n");
+
+        return EXIT_FAILURE;
+    }
+
+    if (strcmp(argv[1], "-p") != 0) {
+        printf("Errro: The first argument must be -p.\n");
+        return EXIT_FAILURE;
+    }
+
+    int port = atoi(argv[2]);
+
+    if (port <= 0 || port > 65535) {
+        printf("Error: Invalid port number.\n");
+        return EXIT_FAILURE;
+    }
+
     setbuf(stdout, NULL);
 
-    int server_fd = start_server();
+    int server_fd = start_server(port);
 
-    if (server_fd == -1) {
+    if (server_fd == EXIT_FAILURE || server_fd == -1) {
         printf("Server failed to start\n\n");
         return EXIT_FAILURE;
     }
 
-    printf("Server listening on port %d\n\n", PORT);
+    printf("Server listening on port %d\n\n", port);
 
     signal(SIGINT, &stop_server);
 

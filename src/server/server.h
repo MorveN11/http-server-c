@@ -2,9 +2,8 @@
 #define SERVER_H
 
 #define MAX_CONNECTIONS 35
-#define PORT 3000
 
-int start_server();
+int start_server(int port);
 
 void stop_server();
 

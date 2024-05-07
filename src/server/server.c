@@ -19,7 +19,7 @@ void stop_server() {
     exit(EXIT_SUCCESS);
 }
 
-int start_server() {
+int start_server(int port) {
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (server_fd == -1) {
@@ -38,7 +38,7 @@ int start_server() {
 
     struct sockaddr_in serv_addr = {
         .sin_family = AF_INET,
-        .sin_port = htons(PORT),
+        .sin_port = htons(port),
         .sin_addr = {htonl(INADDR_ANY)},
     };
     int bind_status = bind(server_fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
