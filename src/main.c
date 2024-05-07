@@ -1,37 +1,25 @@
 #include "client/client.h"
 #include "connection/connection.h"
+#include "port/port.h"
 #include "routes/routes.h"
 #include "server/server.h"
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
+    setbuf(stdout, NULL);
+
     printf("Starting server...\n\n");
 
-    if (argc != 3) {
-        printf("Error: Invalid number of arguments.\n");
-        printf("Usage: ./server -p <port>\n\n");
+    int port = handle_port(argc, argv);
 
+    if (port == -1) {
+        printf("Failed to start server\n\n");
         return EXIT_FAILURE;
     }
-
-    if (strcmp(argv[1], "-p") != 0) {
-        printf("Errro: The first argument must be -p.\n");
-        return EXIT_FAILURE;
-    }
-
-    int port = atoi(argv[2]);
-
-    if (port <= 0 || port > 65535) {
-        printf("Error: Invalid port number.\n");
-        return EXIT_FAILURE;
-    }
-
-    setbuf(stdout, NULL);
 
     int server_fd = start_server(port);
 

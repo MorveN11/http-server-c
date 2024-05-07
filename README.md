@@ -13,5 +13,7 @@ For this project you should have installed the following dependencies:
 Execute the following command in the terminal to run the server:
 
 ```bash
-./run.sh
+./server -p <port>
 ```
+
+Where `<port>` is the port number where the server will be listening.
