@@ -4,9 +4,7 @@ By Manuel Morales
 
 ## Necessary dependencies
 
-For this project you should have installed the following dependencies:
-
-- python3.12-devel
+For this project you should have installed `python3` on your computer.
 
 ## Run the server
 

@@ -1,5 +1,5 @@
 #include "post.h"
-#include "../../execute/python.h"
+#include "../../execute/python_process_call.h"
 #include "../routes.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,12 +20,23 @@ char *handle_execute_py(struct Request *request) {
     }
 
     char *body = request->body;
-    char *output = execute_python_code(body);
+    struct PythonOutput *execution = execute_python_code(body);
+    char *output = execution->output;
+    int status = execution->status;
 
-    if (output == NULL) {
-        return "HTTP/1.1 500 Internal Server Error\nContent-Type: text/plain\r\nContent-Length: 27\r\n\r\nError "
-               "executing "
-               "Python code";
+    if (status == 1) {
+        int response_size = strlen("HTTP/1.1 500 Internal Server Error\nContent-Type: text/plain\r\nContent-Length: ") +
+                            snprintf(NULL, 0, "%zu", strlen("Error executing Python code\n\n") + strlen(output)) + 4 +
+                            strlen("Error executing Python code\n\n") + strlen(output) + 1;
+
+        char *response = (char *)malloc(response_size * sizeof(char));
+
+        snprintf(response, response_size,
+                 "HTTP/1.1 500 Internal Server Error\nContent-Type: text/plain\r\nContent-Length: %zu\r\n\r\nError "
+                 "executing Python code\n\n%s",
+                 strlen(output) + strlen("Error executing Python code\n\n"), output);
+
+        return response;
     }
 
     int response_size = strlen("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ") +
